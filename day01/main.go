@@ -13,6 +13,45 @@ type Instruction struct {
 	Direction string
 	Distance  int
 }
+func part1(instructions []Instruction) int {
+	position := 50
+	count := 0
+
+	for _, inst := range instructions {
+		if inst.Direction == "R" {
+			position = (position + inst.Distance) % 100
+		} else {
+			position = (position - inst.Distance + 100*1000) % 100
+		}
+
+		if position == 0 {
+			count++
+		}
+	}
+
+	return count
+}
+func part2(instructions []Instruction) int {
+	position := 50
+	count := 0
+
+	for _, inst := range instructions {
+		for i := 0; i < inst.Distance; i++ {
+			if inst.Direction == "R" {
+				position = (position + 1) % 100
+			} else {
+				position = (position - 1 + 100) % 100
+			}
+
+			if position == 0 {
+				count++
+			}
+		}
+	}
+
+	return count
+}
+
 
 func main() {
 	file, err := os.Open("input.txt")
@@ -45,23 +84,9 @@ func main() {
 		}
 		instructions = append(instructions, Instruction{Direction: dir, Distance: dist})
 	}
+    fmt.Println("Part 1 =", part1(instructions))
+	fmt.Println("Part 2 =", part2(instructions))
 
-	position := 50
-	zeroCount := 0
 
-	for _, inst := range instructions {
-		if inst.Direction == "R" || inst.Direction == "r" {
-			position = (position + inst.Distance) % 100
-		} else if inst.Direction == "L" || inst.Direction == "l" {
-			position = (position - inst.Distance + 100*1000) % 100
-		} else {
-			log.Fatal("invalid direction:", inst.Direction)
-		}
-
-		if position == 0 {
-			zeroCount++
-		}
-	}
-
-	fmt.Println("Password =", zeroCount)
 }
+
